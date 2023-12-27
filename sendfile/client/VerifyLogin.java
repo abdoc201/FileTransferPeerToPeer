@@ -11,9 +11,9 @@ public class VerifyLogin {
 
     public static boolean authenticateUser(String email, String password) {
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "test", "test");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/ENSA_STUDENTS", "root", "mysql password");
 
-            String query = "SELECT * FROM users WHERE email = ?";
+            String query = "SELECT * FROM students WHERE email = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, email);
 

@@ -6,32 +6,28 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class addUser {
+public class AddStudent {
 
    public static void main(String[] args) {
 
-    String url = "jdbc:mysql://localhost:3306/test";
-    String username = "test";
-    String password = "test";
+    String url = "jdbc:mysql://localhost:3306/ENSA_STUDENTS";
+    String username = "root";
+    String password = "mysql password";
 
-    // Sample user data
-    String email = "test";
-    String plainPassword = "test";
+    String email = "student's email";
+    String plainPassword = "student's password";
 
     try {
-        // Establish database connection
         Connection connection = DriverManager.getConnection(url, username, password);
 
-        // Hash the plain password using BCrypt
         String hashedPassword = BCrypt.hashpw(plainPassword, BCrypt.gensalt());
 
-        // Insert user into the 'users' table
-        String insertQuery = "INSERT INTO users (email, password) VALUES (?, ?)";
+        String insertQuery = "INSERT INTO students (email, password) VALUES (?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, hashedPassword);
             preparedStatement.executeUpdate();
-            System.out.println("User inserted successfully.");
+            System.out.println("Student inserted successfully.");
         }
     } catch (SQLException e) {
         e.printStackTrace();
