@@ -1,6 +1,4 @@
 
-//package sendfile.server;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,24 +13,15 @@ public class MainForm extends javax.swing.JFrame {
     SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a");
     Thread t;
     ServerThread serverThread;
-    /** Chat List  **/
     public Vector socketList = new Vector();
     public Vector clientList = new Vector();
-    /** File Sharing List **/
     public Vector clientFileSharingUsername = new Vector();
     public Vector clientFileSharingSocket = new Vector();
-    /** Server **/
     ServerSocket server;
-
-    // Tạo cấu trúc form MainForm
      
     public MainForm() {
         initComponents();
-        MyInit();
     }
-    void MyInit(){
-         setLocationRelativeTo(null);
-     }
     
     public void appendMessage(String msg){
         Date date = new Date();
@@ -119,9 +108,6 @@ public class MainForm extends javax.swing.JFrame {
         }
     }
 
-   
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
@@ -133,16 +119,11 @@ public class MainForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("ENSA P2P Connector");
+        setTitle("CampusConnector Server");
 
         jLabel1.setText("Port:");
 
         jTextField1.setText("3333");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
 
         jButton1.setText("Start Connection");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -205,9 +186,9 @@ public class MainForm extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         int port = Integer.parseInt(jTextField1.getText());
         serverThread = new ServerThread(port, this);
         t = new Thread(serverThread);
@@ -217,23 +198,14 @@ public class MainForm extends javax.swing.JFrame {
 
         jButton1.setEnabled(false);
         jButton2.setEnabled(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         int confirm = JOptionPane.showConfirmDialog(null, "End Connection?");
         if(confirm == 0){
             serverThread.stop();
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
+    }
     public static void main(String args[]) {
        
         try {
@@ -252,17 +224,12 @@ public class MainForm extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainForm().setVisible(true);
             }
         });
     }
-
-    // Variables declaration 
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -270,5 +237,4 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
-      
 }

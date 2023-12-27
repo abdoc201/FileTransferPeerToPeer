@@ -29,21 +29,17 @@ public class ClientThread implements Runnable{
             main.appendMessage("[IOException]: "+ e.getMessage(), "Error", Color.RED, Color.RED);
         }
     }
-
-
     @Override
     public void run() {
         try {
             while(!Thread.currentThread().isInterrupted()){
                 String data = dis.readUTF();
                 st = new StringTokenizer(data);
-                /** Get Message CMD **/
                 String CMD = st.nextToken();
 
-                //options
                 switch(CMD){
                     case "CMD_MESSAGE":
-                        SoundEffect.MessageReceive.play(); //  Play Audio clip
+                        SoundEffect.MessageReceive.play();
                         String msg = "";
                         String frm = st.nextToken();
                         while(st.hasMoreTokens()){
@@ -65,18 +61,17 @@ public class ClientThread implements Runnable{
                     
                         
                     
-                    case "CMD_FILE_XD":  // Format:  CMD_FILE_XD [sender] [receiver] [filename]
+                    case "CMD_FILE_XD":  
                         String sender = st.nextToken();
                         String receiver = st.nextToken();
                         String fname = st.nextToken();
                         int confirm = JOptionPane.showConfirmDialog(main, "From: "+sender+"\nfile name: "+fname+"\nDo you accept this file?");
-                        //SoundEffect.FileSharing.play(); //   Play Audio
+                      
                         if(confirm == 0){ 
 
                             main.openFolder();
                             try {
                                 dos = new DataOutputStream(socket.getOutputStream());
-                                // Format:  CMD_SEND_FILE_ACCEPT [ToSender] [Message]
                                 String format = "CMD_SEND_FILE_ACCEPT "+sender+" Accept";
                                 dos.writeUTF(format);
                                 
@@ -84,7 +79,6 @@ public class ClientThread implements Runnable{
                                 Socket fSoc = new Socket(main.getMyHost(), main.getMyPort());
                                 DataOutputStream fdos = new DataOutputStream(fSoc.getOutputStream());
                                 fdos.writeUTF("CMD_SHARINGSOCKET "+ main.getMyUsername());
-                                /*  Run Thread for this   */
                                 new Thread(new ReceivingFileThread(fSoc, main)).start();
                             } catch (IOException e) {
                                 System.out.println("[CMD_FILE_XD]: "+e.getMessage());

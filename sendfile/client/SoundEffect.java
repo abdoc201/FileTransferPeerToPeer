@@ -12,8 +12,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public enum SoundEffect {
     
-    MessageReceive("/audio/Ring.wav", false), //  Ringtone for Chat message receive
-    FileSharing("/audio/alarm.wav", false); //   Ringtone for income file
+    MessageReceive("/audio/Ring.wav", false),
+    FileSharing("/audio/alarm.wav", false);
     private Clip clip;
     private boolean loop;
     
@@ -32,12 +32,10 @@ public enum SoundEffect {
     
     public void play(){
         if(clip.isRunning()){
-            clip.stop(); //  Stop Audio
+            clip.stop(); 
         }
-        //  Reset Audio from the beginning
         clip.setFramePosition(0);
         clip.start();
-        //  Check if audio play contineously
         if(loop){
             clip.loop(Clip.LOOP_CONTINUOUSLY);
         }
@@ -45,7 +43,7 @@ public enum SoundEffect {
     
     public void stop(){
         if(clip.isRunning()){
-            clip.stop(); //   Stop Audio
+            clip.stop(); 
         }
     }
 }

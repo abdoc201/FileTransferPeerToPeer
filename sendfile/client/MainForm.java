@@ -1,10 +1,7 @@
 package sendfile.client;
 
-import sendfile.client.LoginForm;
-import sendfile.client.ClientThread;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.HeadlessException;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -30,7 +27,6 @@ public class MainForm extends javax.swing.JFrame {
 
     public MainForm() {
         initComponents();
-        MyInit();
     }
 
     public void initFrame(String username, String host, int port) {
@@ -38,12 +34,7 @@ public class MainForm extends javax.swing.JFrame {
         this.host = host;
         this.port = port;
         setTitle("Logged in as: " + username);
-        // Connect 
         connect();
-    }
-
-    void MyInit() {
-        setLocationRelativeTo(null);
     }
 
     public void connect() {
@@ -51,15 +42,12 @@ public class MainForm extends javax.swing.JFrame {
         try {
             socket = new Socket(host, port);
             dos = new DataOutputStream(socket.getOutputStream());
-            // send the connecting username
             dos.writeUTF("CMD_JOIN " + username);
             appendMessage(" Connected", "Status", Color.BLUE, Color.BLUE);
             appendMessage(" Send messages now!", "Status", Color.BLUE, Color.BLUE);
 
-            // Start Client Thread 
             new Thread(new ClientThread(socket, this)).start();
             jButton1.setEnabled(true);
-            // connected successfully
             isConnected = true;
 
         } catch (IOException e) {
@@ -69,16 +57,10 @@ public class MainForm extends javax.swing.JFrame {
         }
     }
 
-    /*
-        Connected
-    */
     public boolean isConnected() {
         return this.isConnected;
     }
 
-    /*
-        Display Message
-    */
     public void appendMessage(String msg, String header, Color headerColor, Color contentColor) {
         jTextPane1.setEditable(true);
         getMsgHeader(header, headerColor);
@@ -86,9 +68,6 @@ public class MainForm extends javax.swing.JFrame {
         jTextPane1.setEditable(false);
     }
 
-    /*
-        Chat Message
-    */
     public void appendMyMessage(String msg, String header) {
         jTextPane1.setEditable(true);
         getMsgHeader(header, Color.GREEN);
@@ -96,10 +75,6 @@ public class MainForm extends javax.swing.JFrame {
         jTextPane1.setEditable(false);
     }
 
-
-    /*
-     * Message header
-     */
     public void getMsgHeader(String header, Color color) {
         int len = jTextPane1.getDocument().getLength();
         jTextPane1.setCaretPosition(len);
@@ -107,9 +82,6 @@ public class MainForm extends javax.swing.JFrame {
         jTextPane1.replaceSelection(header + ":");
     }
 
-    /*
-     * Message content
-     */
     public void getMsgContent(String msg, Color color) {
         int len = jTextPane1.getDocument().getLength();
         jTextPane1.setCaretPosition(len);
@@ -121,9 +93,6 @@ public class MainForm extends javax.swing.JFrame {
         sampleOnlineList(list);
     }
 
-    /*
-     * Display the list of users currently online
-     */
     public void showOnLineList(Vector list) {
         try {
             txtpane2.setEditable(true);
@@ -147,9 +116,6 @@ public class MainForm extends javax.swing.JFrame {
         }
     }
 
-    /*
-     ************************************ Display online list ************************************
-     */
     private void sampleOnlineList(Vector list) {
         txtpane2.setEditable(true);
         txtpane2.removeAll();
@@ -157,7 +123,6 @@ public class MainForm extends javax.swing.JFrame {
         Iterator i = list.iterator();
         while (i.hasNext()) {
             Object e = i.next();
-            /* Display Online Username */
             JPanel panel = new JPanel();
             panel.setLayout(new FlowLayout(FlowLayout.LEFT));
             panel.setBackground(Color.white);
@@ -169,7 +134,6 @@ public class MainForm extends javax.swing.JFrame {
             int len = txtpane2.getDocument().getLength();
             txtpane2.setCaretPosition(len);
             txtpane2.insertComponent(panel);
-            /* Append Next Line */
             sampleAppend();
         }
         txtpane2.setEditable(false);
@@ -180,76 +144,46 @@ public class MainForm extends javax.swing.JFrame {
         txtpane2.setCaretPosition(len);
         txtpane2.replaceSelection("\n");
     }
-    /*
-     ************************************ Show Online Sample ************************************
-     */
-
-    /*
-     * Get image file path
-     */
     public URL getImageFile() {
         URL url = this.getClass().getResource("/images/online.png");
         return url;
     }
 
-    /*
-     * Set myTitle
-     */
     public void setMyTitle(String s) {
         setTitle(s);
     }
-    
-    /*
-     * Get download folder method
-     */
+   
     public String getMyDownloadFolder() {
         return this.mydownloadfolder;
     }
 
-    /*
-     * Get host method
-     */
     public String getMyHost() {
         return this.host;
     }
 
-    /*
-     * Get Port method
-     */
     public int getMyPort() {
         return this.port;
     }
 
-    /*
-     * Get My Username method
-     */
     public String getMyUsername() {
         return this.username;
     }
 
-    /*
-     * Update Attachment method
-     */
     public void updateAttachment(boolean b) {
         this.attachmentOpen = b;
     }
 
-    /*
-     * This function will open a file chooser
-     */
     public void openFolder() {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int open = chooser.showDialog(this, "Open Folder");
-        if (open == chooser.APPROVE_OPTION) {
+        if (open == JFileChooser.APPROVE_OPTION) {
             mydownloadfolder = chooser.getSelectedFile().toString() + "\\";
         } else {
             mydownloadfolder = "D:\\";
         }
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -266,12 +200,11 @@ public class MainForm extends javax.swing.JFrame {
         LogoutMenu = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         sendFileMenu = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 255, 255));
 
-        jTextPane1.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 11)); // NOI18N
+        jTextPane1.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 11)); 
         jScrollPane1.setViewportView(jTextPane1);
 
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
@@ -290,23 +223,23 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        txtpane2.setFont(new java.awt.Font("Tahoma", 1, 9)); // NOI18N
+        txtpane2.setFont(new java.awt.Font("Tahoma", 1, 9)); 
         txtpane2.setForeground(new java.awt.Color(120, 14, 3));
         txtpane2.setAutoscrolls(false);
         txtpane2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane3.setViewportView(txtpane2);
 
         jLabel1.setBackground(new java.awt.Color(255, 153, 153));
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); 
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("       Online List");
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo_ensa.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo_ensa.png"))); 
 
-        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/check.png"))); // NOI18N
+        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/check.png"))); 
         jMenu2.setText("Account");
 
-        LogoutMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/loggoff.png"))); // NOI18N
+        LogoutMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/loggoff.png"))); 
         LogoutMenu.setText("Log Out");
         LogoutMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -317,7 +250,7 @@ public class MainForm extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sharing.png"))); // NOI18N
+        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sharing.png"))); 
         jMenu3.setText("Share File");
         jMenu3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -325,7 +258,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        sendFileMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sendfile.png"))); // NOI18N
+        sendFileMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sendfile.png"))); 
         sendFileMenu.setText("Send File");
         sendFileMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -333,15 +266,6 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         jMenu3.add(sendFileMenu);
-
-        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/process.png"))); // NOI18N
-        jMenuItem3.setText("Download");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem3);
 
         jMenuBar1.add(jMenu3);
 
@@ -398,10 +322,9 @@ public class MainForm extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void sendFileMenuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_sendFileMenuActionPerformed
-        // TODO add your handling code here:
+    private void sendFileMenuActionPerformed(java.awt.event.ActionEvent evt) {
         if (!attachmentOpen) {
             SendFile s = new SendFile();
             if (s.prepare(username, host, port, this)) {
@@ -414,42 +337,25 @@ public class MainForm extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE);
             }
         }
-    }// GEN-LAST:event_sendFileMenuActionPerformed
+    }
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
-        try {
-            JFileChooser chooser = new JFileChooser();
-            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int browse = chooser.showOpenDialog(this);
-            if (browse == chooser.APPROVE_OPTION) {
-                this.mydownloadfolder = chooser.getSelectedFile().toString() + "\\";
-            }
-        } catch (HeadlessException e) {
-        }
-    }// GEN-LAST:event_jMenuItem3ActionPerformed
+    private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {
+    }
 
-    private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenu3ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jMenu3ActionPerformed
-
-    private void LogoutMenuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_LogoutMenuActionPerformed
-        // TODO add your handling code here:
+    private void LogoutMenuActionPerformed(java.awt.event.ActionEvent evt) {
         int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to log out?");
         if (confirm == 0) {
             try {
                 socket.close();
                 setVisible(false);
-                /** Login Form **/
                 new LoginForm().setVisible(true);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
         }
-    }// GEN-LAST:event_LogoutMenuActionPerformed
+    }
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String content = username + " " + evt.getActionCommand();
             dos.writeUTF("CMD_CHATALL " + content);
@@ -460,10 +366,9 @@ public class MainForm extends javax.swing.JFrame {
                     "Unable to send message right now, cannot connect to the Server at this time, please try again later or restart this application!",
                     "Error", Color.RED, Color.RED);
         }
-    }// GEN-LAST:event_jTextField1ActionPerformed
+    }
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String content = username + " " + jTextField1.getText();
             dos.writeUTF("CMD_CHATALL " + content);
@@ -474,40 +379,7 @@ public class MainForm extends javax.swing.JFrame {
                     "Unable to send message right now, cannot connect to the Server at this time, please try again later or restart this application!",
                     "Error", Color.RED, Color.RED);
         }
-    }// GEN-LAST:event_jButton1ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-       
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainForm().setVisible(true);
-            }
-        });
     }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem LogoutMenu;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -516,12 +388,10 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JMenuItem sendFileMenu;
     private javax.swing.JTextPane txtpane2;
-    // End of variables declaration//GEN-END:variables
 }

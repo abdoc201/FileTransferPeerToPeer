@@ -1,7 +1,6 @@
-package com;
+package sendfile.client;
 
 import javax.swing.JOptionPane;
-
 public class Login extends javax.swing.JFrame {
 
     public Login() {
@@ -20,11 +19,11 @@ public class Login extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jPasswordField1 = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        jButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("File Transfer");
+        setTitle("CampusConnect");
         setPreferredSize(new java.awt.Dimension(800, 500));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -33,14 +32,13 @@ public class Login extends javax.swing.JFrame {
 
         Right.setBackground(new java.awt.Color(0, 102, 102));
         Right.setPreferredSize(new java.awt.Dimension(400, 500));
-        jLabel5.setIcon(new javax.swing.ImageIcon("icon\\logo_ensa.png"));
+        jLabel5.setIcon(new javax.swing.ImageIcon("images\\logo_ensa.png"));
         jLabel6.setFont(new java.awt.Font("Showcard Gothic", 1, 24)); 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("ENSA MARRAKECH");
 
         jLabel7.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); 
         jLabel7.setForeground(new java.awt.Color(204, 204, 204));
-        //jLabel7.setText("copyright © company name All rights reserved");
 
         javax.swing.GroupLayout RightLayout = new javax.swing.GroupLayout(Right);
         Right.setLayout(RightLayout);
@@ -81,7 +79,7 @@ public class Login extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); 
         jLabel1.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel1.setText("LOGIN");
+        jLabel1.setText("Login");
 
         jLabel2.setBackground(new java.awt.Color(102, 102, 102));
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
@@ -94,10 +92,17 @@ public class Login extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
         jLabel3.setText("Password");
 
-        jButton1.setBackground(new java.awt.Color(0, 102, 102));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Login");
+        jButton.setBackground(new java.awt.Color(0, 102, 102));
+        jButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        jButton.setForeground(new java.awt.Color(255, 255, 255));
+        jButton.setText("Login");
+
+        jButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonActionPerformed(evt); 
+            }
+        });
+            
 
         javax.swing.GroupLayout LeftLayout = new javax.swing.GroupLayout(Left);
         Left.setLayout(LeftLayout);
@@ -116,7 +121,7 @@ public class Login extends javax.swing.JFrame {
                                 .addComponent(jTextField1)
                                 .addComponent(jLabel3)
                                 .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(LeftLayout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -137,7 +142,7 @@ public class Login extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
                 .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4))
@@ -161,18 +166,15 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 149, Short.MAX_VALUE))
         );
+        
+        jPasswordField1.getRootPane().setDefaultButton(jButton);
 
         getAccessibleContext().setAccessibleName("LOGIN");
         pack();
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt); 
-            }
-        });
     }
     
     
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonActionPerformed(java.awt.event.ActionEvent evt) {
         String email = jTextField1.getText();
         char[] passwordArray = jPasswordField1.getPassword();
         String password = new String(passwordArray);
@@ -184,8 +186,8 @@ public class Login extends javax.swing.JFrame {
 
         if (VerifyLogin.authenticateUser(email, password)) {
             JOptionPane.showMessageDialog(this, "Login successful", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    SendRecieve frame = new SendRecieve();
-                    Main.setVisibility(frame);
+                    LoginForm loginform = new LoginForm();
+                    LoginForm.setVisibility(loginform);
                     dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Invalid email or password", "Error", JOptionPane.ERROR_MESSAGE);
@@ -193,7 +195,7 @@ public class Login extends javax.swing.JFrame {
     }
     private javax.swing.JPanel Left;
     private javax.swing.JPanel Right;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

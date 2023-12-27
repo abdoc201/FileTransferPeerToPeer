@@ -1,7 +1,6 @@
 package sendfile.client;
 
 
-import sendfile.client.MainForm;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -24,19 +23,12 @@ public class SendFile extends javax.swing.JFrame {
     private String sendTo;
     private String file;
     private MainForm main;
-    private Object chooser;
-    
-    
-     // Tạo một form SendFile
+    //private Object chooser;
      
     public SendFile() {
         initComponents();
-        MyInit();
         progressbar.setVisible(false);
     }
-    void MyInit(){
-         setLocationRelativeTo(null);
-     }
     
     public boolean prepare(String u, String h, int p, MainForm m){
         this.host = h;
@@ -47,7 +39,6 @@ public class SendFile extends javax.swing.JFrame {
             socket = new Socket(host, port);
             dos = new DataOutputStream(socket.getOutputStream());
             dis = new DataInputStream(socket.getInputStream());
-            //  Format: CMD_SHARINGSOCKET [sender]
             String format = "CMD_SHARINGSOCKET "+ myusername;
             dos.writeUTF(format);
             System.out.println(format);
@@ -59,8 +50,6 @@ public class SendFile extends javax.swing.JFrame {
         }
         return false;
     }
-    
-    
     
     class SendFileThread implements Runnable{
         private SendFile form;
@@ -81,12 +70,12 @@ public class SendFile extends javax.swing.JFrame {
         public void run() {
             try {
                 while (!Thread.currentThread().isInterrupted()) {
-                    String data = dis.readUTF(); // Read the content of the data received from the server
+                    String data = dis.readUTF(); 
                     st = new StringTokenizer(data);
-                    String cmd = st.nextToken(); // Get the first word from the data
+                    String cmd = st.nextToken(); 
 
                     switch(cmd){
-                        case "CMD_RECEIVE_FILE_ERROR":  // Format: CMD_RECEIVE_FILE_ERROR [Message]
+                        case "CMD_RECEIVE_FILE_ERROR":  
                             String msg = "";
                             while(st.hasMoreTokens()){
                                 msg = msg+" "+st.nextToken();
@@ -96,8 +85,7 @@ public class SendFile extends javax.swing.JFrame {
                             this.closeMe();
                             break;
                             
-                        case "CMD_RECEIVE_FILE_ACCEPT":  // Format: CMD_RECEIVE_FILE_ACCEPT [Message]
-                            /* Start the thread to handle the attached file */
+                        case "CMD_RECEIVE_FILE_ACCEPT":  
                             new Thread(new SendingFileThread(socket, file, sendTo, myusername, SendFile.this)).start();
                             break;
                             
@@ -115,9 +103,6 @@ public class SendFile extends javax.swing.JFrame {
                         
                         
                         case "CMD_SENDFILERESPONSE":
-                            /*
-                            Format: CMD_SENDFILERESPONSE [username] [Message]
-                            */
                             String rReceiver = st.nextToken();
                             String rMsg = "";
                             while(st.hasMoreTokens()){
@@ -136,8 +121,6 @@ public class SendFile extends javax.swing.JFrame {
         
     }
    
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
@@ -149,18 +132,13 @@ public class SendFile extends javax.swing.JFrame {
         btnSendFile = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("ENSA RSSP P2P File Transfer ");
+        setTitle("CampusConnect");
 
         jLabel1.setText("Select File :");
 
         txtFile.setEditable(false);
         txtFile.setBackground(new java.awt.Color(255, 255, 255));
         txtFile.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        txtFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFileActionPerformed(evt);
-            }
-        });
 
         btnBrowse.setBackground(new java.awt.Color(255,255,255));
         btnBrowse.setForeground(new java.awt.Color(16,43,91));
@@ -229,27 +207,18 @@ public class SendFile extends javax.swing.JFrame {
                     .addComponent(progressbar, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
-
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void txtFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFileActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFileActionPerformed
-
-    private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
-        // TODO add your handling code here:
+    private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {
         showOpenDialog();
-    }//GEN-LAST:event_btnBrowseActionPerformed
+    }
 
-    private void btnSendFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendFileActionPerformed
-        // TODO add your handling code here:
+    private void btnSendFileActionPerformed(java.awt.event.ActionEvent evt) {
         sendTo = txtSendTo.getText();
         file = txtFile.getText();
-
         if((sendTo.length() > 0) && (file.length() > 0)){
             try {
-                // Format: CMD_SEND_FILE_XD [sender] [receiver] [filename]
                 txtFile.setText("");
                 String fname = getThisFilename(file);
                 String format = "CMD_SEND_FILE_XD "+myusername+" "+sendTo+" "+fname;
@@ -263,27 +232,25 @@ public class SendFile extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(this, "Do not leave it blank!","Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnSendFileActionPerformed
+    }
     public void showOpenDialog(){
         JFileChooser chooser = new JFileChooser();
         int intval = chooser.showOpenDialog(this);
-        if(intval == chooser.APPROVE_OPTION){
+        if(intval == JFileChooser.APPROVE_OPTION){
             txtFile.setText(chooser.getSelectedFile().toString());
         }else{
             txtFile.setText("");
         }
     }
     
-    
-    
     public void disableGUI(boolean d){
-        if(d){ // Disable
+        if(d){ 
             txtSendTo.setEditable(false);
             btnBrowse.setEnabled(false);
             btnSendFile.setEnabled(false);
             txtFile.setEditable(false);
             progressbar.setVisible(true);
-        } else { // Enable
+        } else { 
             txtSendTo.setEditable(true);
             btnSendFile.setEnabled(true);
             btnBrowse.setEnabled(true);
@@ -291,76 +258,32 @@ public class SendFile extends javax.swing.JFrame {
             progressbar.setVisible(false);
         }
     }
-    
-    
 
     public void setMyTitle(String s){
         setTitle(s);
     }
-    
- 
+
     protected void closeThis(){
         dispose();
     }
     
-   
     public String getThisFilename(String path){
         File p = new File(path);
         String fname = p.getName();
         return fname.replace(" ", "_");
     }
     
-   
     public void updateAttachment(boolean b){
         main.updateAttachment(b);
     }
-    
     
     public void updateBtn(String str){
         btnSendFile.setText(str);
     }
     
-    /**
-     * Update progress bar
-     * @param val 
-     */
     public void updateProgress(int val){
         progressbar.setValue(val);
     }
-    
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-       
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SendFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SendFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SendFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SendFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new SendFile().setVisible(true);
-            }
-        });
-    }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnSendFile;
     private javax.swing.JLabel jLabel1;
@@ -368,5 +291,4 @@ public class SendFile extends javax.swing.JFrame {
     private javax.swing.JProgressBar progressbar;
     private javax.swing.JTextField txtFile;
     private javax.swing.JTextField txtSendTo;
-    // End of variables declaration//GEN-END:variables
 }

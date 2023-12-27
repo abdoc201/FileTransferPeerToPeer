@@ -1,6 +1,5 @@
 package sendfile.client;
 
-import sendfile.client.MainForm;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -44,33 +43,30 @@ public class ReceivingFileThread implements Runnable {
 
                 switch (CMD) {
 
-                    // This function will handle receiving a file in a background process from another user
+                   
                     case "CMD_SENDFILE":
                         String consignee = null;
                         try {
                             String filename = st.nextToken();
                             int filesize = Integer.parseInt(st.nextToken());
-                            consignee = st.nextToken(); // Get the Sender Username
+                            consignee = st.nextToken(); 
                             main.setMyTitle("Downloading File....");
                             System.out.println("Downloading File....");
                             System.out.println("From: " + consignee);
                             String path = main.getMyDownloadFolder() + filename;
-                            /* Create Stream */
                             FileOutputStream fos = new FileOutputStream(path);
                             InputStream input = socket.getInputStream();
-                            /* Monitor Progress */
                             ProgressMonitorInputStream pmis = new ProgressMonitorInputStream(main,
                                     "Downloading file please wait...", input);
-                            /* Buffer */
-                            BufferedInputStream bis = new BufferedInputStream(pmis);
-                            /** Create a temporary file **/
-                            byte[] buffer = new byte[BUFFER_SIZE];
-                            int count, percent = 0;
-                            while ((count = bis.read(buffer)) != -1) {
-                                percent = percent + count;
-                                int p = (percent / filesize);
-                                main.setMyTitle("Downloading File  " + p + "%");
-                                fos.write(buffer, 0, count);
+                            try (BufferedInputStream bis = new BufferedInputStream(pmis)) {
+                                byte[] buffer = new byte[BUFFER_SIZE];
+                                int count, percent = 0;
+                                while ((count = bis.read(buffer)) != -1) {
+                                    percent = percent + count;
+                                    int p = (percent / filesize);
+                                    main.setMyTitle("Downloading File  " + p + "%");
+                                    fos.write(buffer, 0, count);
+                                }
                             }
                             fos.flush();
                             fos.close();
@@ -78,10 +74,6 @@ public class ReceivingFileThread implements Runnable {
                             JOptionPane.showMessageDialog(null, "File has been downloaded to \n'" + path + "'");
                             System.out.println("File has been saved: " + path);
                         } catch (IOException e) {
-                            /*
-                             * Send error message back to sender Format: CMD_SENDFILERESPONSE [username]
-                             * [Message]
-                             */
                             DataOutputStream eDos = new DataOutputStream(socket.getOutputStream());
                             eDos.writeUTF("CMD_SENDFILERESPONSE " + consignee
                                     + " Connection lost, please try again.!");
